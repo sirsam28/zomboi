@@ -13,7 +13,7 @@ class ServerHandler(commands.Cog):
         self.logPath = logPath
         self.scriptPath = os.getenv("SCRIPT_PATH")
         self.lastUpdateTimestamp = datetime.now()
-        if self.scriptPath is None or len(self.scriptPath) == 0 or not Path(self.scriptPath).is_dir():
+        if self.scriptPath is None or len(self.scriptPath) == 0:
             self.bot.log.error(
                 f"script path {self.scriptPath} not found")
         else:
