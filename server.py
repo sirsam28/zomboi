@@ -9,8 +9,8 @@ import subprocess
 DISCORD_MAX_CHAR = 2000
 
 pathsToTry = [
-    "Zomboid/scripts",
-    "zomboi/scripts"
+    "Zomboid/scripts/checkModsNeedUpdate.sh",
+    "zomboi/scripts/checkModsNeedUpdate.sh"
 ]
 
 
