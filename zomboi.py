@@ -55,10 +55,13 @@ zomboi.log.setLevel(logging.DEBUG)
 
 @zomboi.event
 async def on_ready():
-    zomboi.log.info(f"We have logged in as {zomboi.user}")
+    print(f"We have logged in as {zomboi.user}")
     channel = os.getenv("CHANNEL")
-    zomboi.channel = zomboi.get_channel(int(channel)) if channel.isdigit() else None  # Find by id
-    await zomboi.channel.send("Server is now up!")
+    zomboi.channel = zomboi.get_channel(int(channel)) if channel and channel.isdigit() else None  # Find by id
+    if zomboi.channel:
+        await zomboi.channel.send("Server is now up!")
+    else:
+        print(f"Error: Channel with ID {channel} not found or invalid.")
     if zomboi.channel is None:
         zomboi.channel = discord.utils.get(
             zomboi.get_all_channels(), name=channel
