@@ -58,7 +58,7 @@ class ServerHandler(commands.Cog):
             stdout = await process.communicate()
 
             # Get the output of stdout
-            return stdout.decode().strip()
+            return stdout
         except Exception as e:
             return f"An unexpected error occurred: {e}", ""
 
