@@ -37,7 +37,8 @@ class PerkHandler(commands.Cog):
                     if timestamp > newTimestamp:
                         newTimestamp = timestamp
                     if timestamp > self.lastUpdateTimestamp:
-                        message = self.handleLog(timestamp, message, fromUpdate=True)
+                        message = self.handleLog(
+                            timestamp, message, fromUpdate=True)
                         if message is not None and self.bot.channel is not None:
                             await self.bot.channel.send(message)
                     else:
@@ -61,19 +62,21 @@ class PerkHandler(commands.Cog):
 
     def handleLog(self, timestamp: datetime, message: str, fromUpdate=False):
         # Ignore the id at the start of the message, no idea what it's for
-        message = message[message.find("[", 2) + 1 :]
+        message = message[message.find("[", 2) + 1:]
 
         # Next is the name which we use to get the user
         name, message = message.split("]", 1)
         userHandler = self.bot.get_cog("UserHandler")
         user = userHandler.getUser(name)
-        char_name = userHandler.getCharName(name) if fromUpdate and user else None
+        char_name = userHandler.getCharName(
+            name) if fromUpdate and user else None
         log_char_string = 'aka ' + char_name + ' ' if char_name else ''
 
         # Then position which we set if it's more recent
-        x = message[1 : message.find(",")]
-        y = message[message.find(",") + 1 : message.find(",", message.find(",") + 1)]
-        message = message[message.find("[", 2) + 1 :]
+        x = message[1: message.find(",")]
+        y = message[message.find(
+            ",") + 1: message.find(",", message.find(",") + 1)]
+        message = message[message.find("[", 2) + 1:]
 
         if timestamp > user.lastSeen:
             user.lastSeen = timestamp

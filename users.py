@@ -11,6 +11,7 @@ from typing import List
 
 DISCORD_MAX_CHAR = 2000
 
+
 @dataclass
 class User:
     """A class representing a user"""
@@ -57,15 +58,18 @@ class UserHandler(commands.Cog):
         from time import sleep
         sleep(5)
         try:
-            playerdb = Path(os.getenv("SAVES_PATH")).joinpath("players.db") if os.getenv("SAVES_PATH") else Path.home().joinpath("Zomboid/Saves/Multiplayer/pzserver").joinpath("players.db")
+            playerdb = Path(os.getenv("SAVES_PATH")).joinpath("players.db") if os.getenv(
+                "SAVES_PATH") else Path.home().joinpath("Zomboid/Saves/Multiplayer/pzserver").joinpath("players.db")
             if not playerdb.is_file():
-                self.bot.log.error("Zomboid saves path was set incorrectly. Please check your environment variables")
+                self.bot.log.error(
+                    "Zomboid saves path was set incorrectly. Please check your environment variables")
                 return ''
             # Connect to the sqlite player db
             con = sqlite3.connect(str(playerdb))
             cur = con.cursor()
             # check the networkPlayers table
-            cur.execute('SELECT name FROM networkPlayers WHERE username = ?', [name])
+            cur.execute(
+                'SELECT name FROM networkPlayers WHERE username = ?', [name])
             charName = cur.fetchone()
             charName = charName[0] if charName else None
             con.close()
@@ -94,7 +98,8 @@ class UserHandler(commands.Cog):
                 self.lastUpdateTimestamp = newTimestamp
 
         # Also update the bot activity here
-        onlineCount = len([user for user in self.users if self.users[user].online])
+        onlineCount = len(
+            [user for user in self.users if self.users[user].online])
         if onlineCount != self.onlineCount:
             playerString = "nobody" if onlineCount == 0 else f"{onlineCount} survivors"
             # have to abbreviate or it gets truncated
@@ -164,7 +169,7 @@ class UserHandler(commands.Cog):
                 f'```\n{tabulate(messages[x], headers=headers, tablefmt="fancy_grid")}\n```'
             )
             x += 1
-    
+
     @commands.command()
     async def users(self, ctx, arg: str = None):
         """
@@ -208,7 +213,8 @@ class UserHandler(commands.Cog):
                 ]
             )
             table.append(["Online", "Yes" if user.online else "No"])
-            table.append(["Last Seen", user.lastSeen.strftime("%d/%m at %H:%M")])
+            table.append(
+                ["Last Seen", user.lastSeen.strftime("%d/%m at %H:%M")])
             table.append(["Deaths", len(user.died)])
             for perk in user.perks:
                 if int(user.perks[perk]) != 0:

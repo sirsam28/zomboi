@@ -22,16 +22,19 @@ class AdminLogHandler(commands.Cog):
         # If the user has not enabled Admin logs, let's exit
         if not self.sendLogs:
             self.bot.log.info("Admin logs not enabled.")
-            return 
+            return
         self.adminChannel = os.getenv("ADMIN_CHANNEL")
         self.text_channel = os.getenv("CHANNEL")
         if not self.adminChannel:
-            self.bot.log.warning("Unable to get admin channel, setting to default channel...")
+            self.bot.log.warning(
+                "Unable to get admin channel, setting to default channel...")
             self.adminChannel = self.bot.channel.name
         if self.adminChannel.isdigit():
-            self.adminChannel = self.bot.get_channel(int(self.adminChannel))  # Find by id
+            self.adminChannel = self.bot.get_channel(
+                int(self.adminChannel))  # Find by id
         if self.text_channel.isdigit():
-            self.text_channel = self.bot.get_channel(int(self.text_channel))  # Find by id
+            self.text_channel = self.bot.get_channel(
+                int(self.text_channel))  # Find by id
         if isinstance(self.adminChannel, str):
             self.adminChannel = discord.utils.get(
                 self.bot.get_all_channels(), name=self.adminChannel
@@ -48,7 +51,8 @@ class AdminLogHandler(commands.Cog):
     @tasks.loop(seconds=10)
     async def update(self):
         # Don't really know how performant this will be since it's opening 4 files -- set it to 10 seconds loop for now
-        files = glob.glob(self.logPath + "/*map.txt") + glob.glob(self.logPath + "/*cmd.txt") + glob.glob(self.logPath + "/*admin.txt") + glob.glob(self.logPath + "/*ClientActionLog.txt") + glob.glob(self.logPath + "/*user.txt") + glob.glob(self.logPath + "/*pvp.txt") + glob.glob(self.logPath + "/*PerkLog.txt")
+        files = glob.glob(self.logPath + "/*map.txt") + glob.glob(self.logPath + "/*cmd.txt") + glob.glob(self.logPath + "/*admin.txt") + glob.glob(self.logPath +
+                                                                                                                                                    "/*ClientActionLog.txt") + glob.glob(self.logPath + "/*user.txt") + glob.glob(self.logPath + "/*pvp.txt") + glob.glob(self.logPath + "/*PerkLog.txt")
         if len(files) > 0:
             newTimestamps = []
             for file in files:
@@ -68,4 +72,3 @@ class AdminLogHandler(commands.Cog):
                             break
             if len(newTimestamps) > 0:
                 self.lastUpdateTimestamp = max(newTimestamps)
-        

@@ -5,12 +5,14 @@ from rcon.source import Client, rcon
 import re
 from datetime import datetime
 
+
 class RCONAdapter(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self.rconHost = os.getenv("RCON_HOST") if os.getenv("RCON_HOST") else "localhost"
+        self.rconHost = os.getenv("RCON_HOST") if os.getenv(
+            "RCON_HOST") else "localhost"
         port = os.getenv("RCON_PORT")
-        if port is None:            
+        if port is None:
             self.rconPort = 27015
             self.bot.log.info("Using default port")
         else:
@@ -56,10 +58,12 @@ class RCONAdapter(commands.Cog):
     async def syncplayers(self):
         """Syncs online players by checking number with rcon"""
         if not self.rconPassword:
-            self.bot.log.warning('RCON password not set -- unable to syncplayers.')
+            self.bot.log.warning(
+                'RCON password not set -- unable to syncplayers.')
             self.update.stop()
             return
-        self.bot.log.info('Checking rcon to see if the player counter is correct')
+        self.bot.log.info(
+            'Checking rcon to see if the player counter is correct')
         try:
             response = await rcon(
                 'players',
@@ -67,7 +71,8 @@ class RCONAdapter(commands.Cog):
             )
         except Exception as e:
             self.bot.log.error(e)
-            self.bot.log.error('Unable to run players command on rcon -- check rcon options')
+            self.bot.log.error(
+                'Unable to run players command on rcon -- check rcon options')
             self.syncplayers.stop()
             return
 
@@ -79,11 +84,13 @@ class RCONAdapter(commands.Cog):
         for user in userHandler.users.values():
             if user.name in response:
                 if user.online == False:
-                    self.bot.log.info(f'Player {user.name} out of sync, currently offline, should be online, fixing...')
+                    self.bot.log.info(
+                        f'Player {user.name} out of sync, currently offline, should be online, fixing...')
                 user.lastSeen = datetime.now()
                 user.online = True
             else:
                 if user.online == True:
-                    self.bot.log.info(f'Player {user.name} out of sync, currently online, should be offline, fixing...')
+                    self.bot.log.info(
+                        f'Player {user.name} out of sync, currently online, should be offline, fixing...')
                 user.online = False
         self.bot.log.info('Synced players successfully!')
