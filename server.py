@@ -66,7 +66,10 @@ class ServerHandler(commands.Cog):
         try:
             # Run the shell script using the bash shell and capture the output
             result = subprocess.run(
-                ["bash", scriptPath], check=True, capture_output=True, text=True)
+                ["bash", scriptPath], check=True, capture_output=True, text=True, stderr=subprocess.PIPE
+            )
+            self.bot.log.info(f"Script Output (stdout): {result.stdout}")
+            self.bot.log.info(f"Script Output (stderr): {result.stderr}")
             return result.stdout.strip()  # Get the output of the script
         except subprocess.CalledProcessError as e:
             # Handle any errors that might occur
