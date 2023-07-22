@@ -42,9 +42,10 @@ class UserHandler(commands.Cog):
 
     def getUser(self, name: str):
         """Get a user from a name, will create if it doesn't exist"""
-        if not name in self.users:
-            self.users[name] = User(name)
-        return self.users[name]
+        name_lower = name.lower()
+        if name_lower not in self.users:
+            self.users[name_lower] = User(name_lower)
+        return self.users[name_lower]
 
     def splitLine(self, line: str):
         """Split a log line into a timestamp and the remaining message"""
@@ -207,7 +208,7 @@ class UserHandler(commands.Cog):
             self.bot.log.info(f"user info by given name: {name}")
 
         if name in self.users:
-            await ctx.send(f"Here's the information for user: {name}")
+            await ctx.send(f"Here's the information for user: **{name}**")
             user = self.users[name]
             table = []
             table.append(["Name", user.name])
@@ -226,4 +227,4 @@ class UserHandler(commands.Cog):
                     table.append([perk, user.perks[perk]])
             await self.check_char_limit(table, ctx)
         else:
-            await ctx.send(f"No information for user with name: {name}")
+            await ctx.send(f"No information for user with name: **{name}**")
