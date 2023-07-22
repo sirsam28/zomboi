@@ -10,9 +10,9 @@ import os
 from pathlib import Path
 from perks import PerkHandler
 from users import UserHandler
-from server import ServerHandler
 from admin import AdminLogHandler
 from rcon_adapter import RCONAdapter
+from server import ServerHandler
 
 load_dotenv(override=True)
 
@@ -67,14 +67,14 @@ async def on_ready():
         zomboi.log.warning("Unable to get channel, will not be enabled")
     else:
         zomboi.log.info("channel connected")
-        await zomboi.channel.send("Server is now up!")
+        await zomboi.channel.send("Spiffo is now up!")
     await zomboi.add_cog(UserHandler(zomboi, logPath))
     await zomboi.add_cog(ChatHandler(zomboi, logPath))
     await zomboi.add_cog(PerkHandler(zomboi, logPath))
     await zomboi.add_cog(RCONAdapter(zomboi))
     await zomboi.add_cog(MapHandler(zomboi))
     await zomboi.add_cog(AdminLogHandler(zomboi, logPath))
-
+    await zomboi.add_cog(ServerHandler(zomboi, logPath))
 
 # Always finally run the bot
 token = os.getenv("DISCORD_TOKEN")
