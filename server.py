@@ -66,24 +66,32 @@ class ServerHandler(commands.Cog):
         try:
             # Run the shell script using the bash shell and capture the output
             result = subprocess.run(
-                ["bash", scriptPath], check=True, capture_output=True, text=True, stderr=subprocess.PIPE
+                ["bash", scriptPath],
+                check=True,
+                capture_output=True,
+                text=True
             )
-            self.bot.log.info(f"Script Output (stdout): {result.stdout}")
-            self.bot.log.info(f"Script Output (stderr): {result.stderr}")
-            return result.stdout.strip()  # Get the output of the script
+            # Get the output of stdout and stderr
+            return result.stdout.strip(), result.stderr.strip()
         except subprocess.CalledProcessError as e:
             # Handle any errors that might occur
-            return f"Error occurred: {e}"
+            # Get the stderr in case of an error
+            return f"Error occurred: {e}", e.stderr.strip()
         except Exception as e:
-            return f"An unexpected error occurred: {e}"
+            return f"An unexpected error occurred: {e}", ""
 
     @commands.command()
     async def checkserver(self, ctx):
         """Check server mods status, will trigger an update if needed in 60 seconds after execution"""
-        output = self.runScript(self.scriptPath)
-        self.bot.log.info(f"Script Output: {output}")
+        stdout_output, stderr_output = self.runScript(self.scriptPath)
 
-        if output:
-            await ctx.send(output)
+        if stdout_output:
+            await ctx.send(f"Script Output (stdout):\n{stdout_output}")
+            self.bot.log.info(f"Script Output: {stdout_output}")
+
         else:
             await ctx.send("The script ran successfully but didn't produce any output.")
+
+        if stderr_output:
+            await ctx.send(f"Script Error (stderr):\n{stderr_output}")
+            self.bot.log.info(f"Script Error: {stderr_output}")
