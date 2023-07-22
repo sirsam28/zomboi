@@ -81,7 +81,7 @@ class ServerHandler(commands.Cog):
     @commands.command()
     async def checkserver(self, ctx):
         """Check server mods status, will trigger an update if needed in 60 seconds after execution"""
-        stdout_output, stderr_output = await self.runScript("your_script.sh")
+        stdout_output, stderr_output = await self.runScript(self.scriptPath)
 
         # Interpret the output of the shell script
         if stdout_output == 'true':
