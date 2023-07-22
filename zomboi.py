@@ -70,14 +70,28 @@ async def on_ready():
         zomboi.log.warning("Unable to get channel, will not be enabled")
     else:
         zomboi.log.info("channel connected")
-        await zomboi.channel.send("Spiffo is now up!")
-    await zomboi.add_cog(UserHandler(zomboi, logPath))
-    await zomboi.add_cog(ChatHandler(zomboi, logPath))
-    await zomboi.add_cog(PerkHandler(zomboi, logPath))
-    await zomboi.add_cog(RCONAdapter(zomboi))
-    await zomboi.add_cog(MapHandler(zomboi))
-    await zomboi.add_cog(AdminLogHandler(zomboi, logPath))
-    await zomboi.add_cog(ServerHandler(zomboi, logPath))
+        await zomboi.channel.send("Ready to assist, ask for `!help`")
+    if os.getenv("USER_HANDLER") == "True":
+        zomboi.log.info("USER_HANDLER feature enabled")
+        await zomboi.add_cog(UserHandler(zomboi, logPath))
+    if os.getenv("CHAT_HANDLER") == "True":
+        zomboi.log.info("CHAT_HANDLER feature enabled")
+        await zomboi.add_cog(ChatHandler(zomboi, logPath))
+    if os.getenv("PERK_HANDLER") == "True":
+        zomboi.log.info("PERK_HANDLER feature enabled")
+        await zomboi.add_cog(PerkHandler(zomboi, logPath))
+    if os.getenv("RCON_ADAPTER") == "True":
+        zomboi.log.info("RCON_ADAPTER feature enabled")
+        await zomboi.add_cog(RCONAdapter(zomboi))
+    if os.getenv("MAP_HANDLER") == "True":
+        zomboi.log.info("MAP_HANDLER feature enabled")
+        await zomboi.add_cog(MapHandler(zomboi))
+    if os.getenv("ADMINLOG_HANDLER") == "True":
+        zomboi.log.info("ADMINLOG_HANDLER feature enabled")
+        await zomboi.add_cog(AdminLogHandler(zomboi, logPath))
+    if os.getenv("SERVER_HANDLER") == "True":
+        zomboi.log.info("SERVER_HANDLER feature enabled")
+        await zomboi.add_cog(ServerHandler(zomboi, logPath))
 
 # Always finally run the bot
 token = os.getenv("DISCORD_TOKEN")
