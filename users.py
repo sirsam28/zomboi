@@ -202,7 +202,12 @@ class UserHandler(commands.Cog):
         """
         if name is None:
             name = ctx.author.name
+            self.bot.log.info(f"user info by author name: {name}")
+        else:
+            self.bot.log.info(f"user info by given name: {name}")
+
         if name in self.users:
+            await ctx.send(f"Here's the information for user: {name}")
             user = self.users[name]
             table = []
             table.append(["Name", user.name])
@@ -220,3 +225,5 @@ class UserHandler(commands.Cog):
                 if int(user.perks[perk]) != 0:
                     table.append([perk, user.perks[perk]])
             await self.check_char_limit(table, ctx)
+        else:
+            await ctx.send(f"No information for user with name: {name}")
