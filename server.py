@@ -4,15 +4,7 @@ from file_read_backwards import FileReadBackwards
 from pathlib import Path
 import glob
 import os
-import subprocess
 import asyncio
-
-DISCORD_MAX_CHAR = 2000
-
-pathsToTry = [
-    "Zomboid/scripts/checkModsNeedUpdate.sh",
-    "zomboi/scripts/checkModsNeedUpdate.sh"
-]
 
 
 class ServerHandler(commands.Cog):
@@ -21,15 +13,9 @@ class ServerHandler(commands.Cog):
         self.logPath = logPath
         self.scriptPath = os.getenv("SCRIPT_PATH")
         self.lastUpdateTimestamp = datetime.now()
-        if self.scriptPath is None or len(self.scriptPath) == 0:
-            for path in pathsToTry:
-                tryPath = Path.home().joinpath(path)
-                if tryPath.exists():
-                    self.scriptPath = str(tryPath)
-                    break
         if self.scriptPath is None or len(self.scriptPath) == 0 or not Path(self.scriptPath).is_dir():
             self.bot.log.error(
-                f"script path {self.scriptPath} not found and/or no suitable default")
+                f"script path {self.scriptPath} not found")
         else:
             self.bot.log.info(f"script path: {self.scriptPath}")
         self.update.start()
