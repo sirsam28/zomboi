@@ -10,6 +10,7 @@ import os
 from pathlib import Path
 from perks import PerkHandler
 from users import UserHandler
+from server import ServerHandler
 from admin import AdminLogHandler
 from rcon_adapter import RCONAdapter
 
