@@ -65,7 +65,7 @@ class ServerHandler(commands.Cog):
 
     @commands.command()
     async def checkserver(self, ctx):
-        """Check server mods status, will trigger an update if needed in 60 seconds after execution"""
+        """Check server mods status, update automatically if needed"""
         stdout_output, stderr_output = await self.runScript(self.scriptPath)
 
         self.bot.log.error(f"stderr_output: {stderr_output}")
