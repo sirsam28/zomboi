@@ -7,11 +7,12 @@ import os
 import subprocess
 
 DISCORD_MAX_CHAR = 2000
-    
+
 pathsToTry = [
     "Zomboid/scripts",
     "zomboi/scripts"
 ]
+
 
 class ServerHandler(commands.Cog):
     def __init__(self, bot, logPath):
@@ -26,7 +27,8 @@ class ServerHandler(commands.Cog):
                     self.scriptPath = str(tryPath)
                     break
         if self.scriptPath is None or len(self.scriptPath) == 0 or not Path(self.scriptPath).is_dir():
-            self.bot.log.error(f"script path {self.scriptPath} not found and/or no suitable default")
+            self.bot.log.error(
+                f"script path {self.scriptPath} not found and/or no suitable default")
         else:
             self.bot.log.info(f"script path: {self.scriptPath}")
         self.update.start()
@@ -58,19 +60,20 @@ class ServerHandler(commands.Cog):
                     else:
                         break
                 self.lastUpdateTimestamp = newTimestamp
-    
+
     # Function to run the shell script
-    def runScript(scriptPath):
-      try:
-          # Run the shell script using the bash shell and capture the output
-          result = subprocess.run(["bash", scriptPath], check=True, capture_output=True, text=True)
-          return result.stdout.strip()  # Get the output of the script
-      except subprocess.CalledProcessError as e:
-          # Handle any errors that might occur
-          return f"Error occurred: {e}"
-      except Exception as e:
-          return f"An unexpected error occurred: {e}"
-    
+    def runScript(self, scriptPath):
+        try:
+            # Run the shell script using the bash shell and capture the output
+            result = subprocess.run(
+                ["bash", scriptPath], check=True, capture_output=True, text=True)
+            return result.stdout.strip()  # Get the output of the script
+        except subprocess.CalledProcessError as e:
+            # Handle any errors that might occur
+            return f"Error occurred: {e}"
+        except Exception as e:
+            return f"An unexpected error occurred: {e}"
+
     @commands.command()
     async def checkserver(self, ctx):
         """Check server mods status, will trigger an update if needed in 60 seconds after execution"""
