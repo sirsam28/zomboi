@@ -10,7 +10,7 @@ DISCORD_MAX_CHAR = 2000
     
 pathsToTry = [
     "Zomboid/scripts",
-    "scripts"
+    "zomboi/scripts"
 ]
 
 class ServerHandler(commands.Cog):
@@ -18,6 +18,7 @@ class ServerHandler(commands.Cog):
         self.bot = bot
         self.logPath = logPath
         self.scriptPath = os.getenv("SCRIPT_PATH")
+        self.lastUpdateTimestamp = datetime.now()
         if self.scriptPath is None or len(self.scriptPath) == 0:
             for path in pathsToTry:
                 tryPath = Path.home().joinpath(path)
@@ -72,7 +73,7 @@ class ServerHandler(commands.Cog):
     
     @commands.command()
     async def checkserver(self, ctx, arg: str = None):
-        """Runs the shell script and sends the output to Discord."""
+        """Check server mods status, will trigger an update if needed in 60 seconds after execution"""
         output = self.runScript(self.scriptPath)
         self.bot.log.info(f"Script Output: {output}")
 
