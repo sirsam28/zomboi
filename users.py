@@ -8,8 +8,6 @@ import os
 import re
 from tabulate import tabulate
 from typing import List
-from pathlib import Path
-import sqlite3
 
 DISCORD_MAX_CHAR = 2000
 
@@ -147,6 +145,26 @@ class UserHandler(commands.Cog):
             if timestamp > self.lastUpdateTimestamp:
                 self.bot.log.debug(f"Ignored: {message}")
 
+    async def check_char_limit(self, tosend, ctx, headers=()):
+        """
+        Check if the message is under the 2000 character discord limit, if not send in multiple messages
+        """
+        # For each message -> make sure they are under the char limit
+        # If not make a new table and then send a new message
+        # Definitely could be more efficient but it works lol
+        messages = [tosend]
+        x = 0
+        for message in messages:
+            while len(f'```\n{tabulate(messages[x], headers=headers, tablefmt="fancy_grid")}\n```') > DISCORD_MAX_CHAR:
+                if x == len(messages) - 1:
+                    messages.append([])
+                messages[x+1].append(messages[x][-1])
+                messages[x] = messages[x][0:-1]
+            await ctx.send(
+                f'```\n{tabulate(messages[x], headers=headers, tablefmt="fancy_grid")}\n```'
+            )
+            x += 1
+    
     @commands.command()
     async def users(self, ctx, arg: str = None):
         """
@@ -169,21 +187,7 @@ class UserHandler(commands.Cog):
                         user.hoursAlive,
                     ]
                 )
-        # For each message -> make sure they are under the char limit
-        # If not make a new table and then send a new message
-        # Definitely could be more efficient but it works lol
-        messages = [table]
-        x = 0
-        for message in messages:
-            while len(f'```\n{tabulate(messages[x], headers=headers, tablefmt="fancy_grid")}\n```') > DISCORD_MAX_CHAR:
-                if x == len(messages) - 1:
-                    messages.append([])
-                messages[x+1].append(messages[x][-1])
-                messages[x] = messages[x][0:-1]
-            await ctx.send(
-                f'```\n{tabulate(messages[x], headers=headers, tablefmt="fancy_grid")}\n```'
-            )
-            x += 1
+        await self.check_char_limit(table, ctx, headers=headers)
 
     @commands.command()
     async def info(self, ctx, name=None):
@@ -209,4 +213,4 @@ class UserHandler(commands.Cog):
             for perk in user.perks:
                 if int(user.perks[perk]) != 0:
                     table.append([perk, user.perks[perk]])
-            await ctx.send(f'```\n{tabulate(table, tablefmt="fancy_grid")}\n```')
+            await self.check_char_limit(table, ctx)

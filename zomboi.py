@@ -58,6 +58,7 @@ async def on_ready():
     zomboi.log.info(f"We have logged in as {zomboi.user}")
     channel = os.getenv("CHANNEL")
     zomboi.channel = zomboi.get_channel(int(channel)) if channel.isdigit() else None  # Find by id
+    await zomboi.channel.send("Server is now up!")
     if zomboi.channel is None:
         zomboi.channel = discord.utils.get(
             zomboi.get_all_channels(), name=channel
