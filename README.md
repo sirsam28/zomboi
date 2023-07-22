@@ -12,14 +12,20 @@ A discord bot for Project Zomboid. You are welcome to [log](https://github.com/J
 ## Commands (prefix: `!`):
 ```
 MapHandler:
-  location Get the last known location of the given user
+  location    Get the last known location of the given user
 RCONAdapter:
-  option   Show or set the value of a server option
+  addxp       Add xp for a skill
+  option      Show or set the value of a server option
+ServerHandler:
+  checkserver Check server mods status, will trigger an update if needed in 6...
 UserHandler:
-  info     Get detailed user info
-  users    Return a list of users on the server with basic info
-No Category:
-  help     Shows this message
+  info        Get detailed user info
+  users       Return a list of users on the server with basic info
+​No Category:
+  help        Shows this message
+
+Type !help command for more info on a command.
+You can also type !help category for more info on a category.
 ```
 
 ## Requirements
