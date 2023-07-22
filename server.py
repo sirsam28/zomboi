@@ -53,26 +53,32 @@ class ServerHandler(commands.Cog):
         try:
             process = await asyncio.create_subprocess_shell(
                 f"bash {scriptPath}",
-                stdout=asyncio.subprocess.PIPE
+                stdout=asyncio.subprocess.PIPE,
+                stderr=asyncio.subprocess.PIPE
             )
-            stdout = await process.communicate()
+            stdout, stderr = await process.communicate()
 
-            # Get the output of stdout
-            return stdout
+            # Get the output of stdout and stderr
+            return stdout.decode().strip(), stderr.decode().strip()
         except Exception as e:
             return f"An unexpected error occurred: {e}", ""
 
     @commands.command()
     async def checkserver(self, ctx):
         """Check server mods status, will trigger an update if needed in 60 seconds after execution"""
-        output = await self.runScript(self.scriptPath)
+        stdout_output, stderr_output = await self.runScript(self.scriptPath)
 
-        self.bot.log.info(f"Script output: {output}")
+        self.bot.log.error(f"stderr_output: {stderr_output}")
+        self.bot.log.info(f"stdout_output: {stdout_output}")
 
         # Interpret the output of the shell script
-        if output == 'false':
+        if stdout_output == 'true':
             await ctx.send("Updating in progress. Mods will be updated shortly.")
-        elif output == 'true':
+        elif stdout_output == 'false':
             await ctx.send("Mods are up to date.")
         else:
             await ctx.send("An error occurred while checking/modifying the mods.")
+
+        if stderr_output:
+            await ctx.send(f"Script Error (stderr):\n{stderr_output}")
+            self.bot.log.info(f"Script Error: {stderr_output}")
