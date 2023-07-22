@@ -86,7 +86,7 @@ class ServerHandler(commands.Cog):
         stdout_output, stderr_output = self.runScript(self.scriptPath)
 
         if stdout_output:
-            await ctx.send(f"Script Output (stdout):\n{stdout_output}")
+            await ctx.send(stdout_output)
             self.bot.log.info(f"Script Output: {stdout_output}")
 
         else:
