@@ -69,6 +69,11 @@ class ServerHandler(commands.Cog):
         """Check server mods status, will trigger an update if needed in 60 seconds after execution"""
         stdout_output, stderr_output = await self.runScript(self.scriptPath)
 
+        if stderr_output:
+            self.bot.log.error(f"stderr_output: {stderr_output}")
+        else:
+            self.bot.log.info(f"stdout_output: {stdout_output}")
+
         # Interpret the output of the shell script
         if stdout_output == 'true':
             await ctx.send("Updating in progress. Mods will be updated shortly.")
