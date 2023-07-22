@@ -67,6 +67,8 @@ class ServerHandler(commands.Cog):
             # Run the shell script using the bash shell and capture the output
             result = subprocess.run(
                 ["bash", scriptPath], check=True, capture_output=True, text=True)
+            self.bot.log.info(f"Script Output (stdout): {result.stdout}")
+            self.bot.log.info(f"Script Output (stderr): {result.stderr}")
             return result.stdout.strip()  # Get the output of the script
         except subprocess.CalledProcessError as e:
             # Handle any errors that might occur
@@ -78,7 +80,6 @@ class ServerHandler(commands.Cog):
     async def checkserver(self, ctx):
         """Check server mods status, will trigger an update if needed in 60 seconds after execution"""
         output = self.runScript(self.scriptPath)
-        self.bot.log.info(f"Script Output: {output}")
 
         if output:
             await ctx.send(output)
