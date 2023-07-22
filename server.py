@@ -5,6 +5,7 @@ from pathlib import Path
 import glob
 import os
 import subprocess
+import asyncio
 
 DISCORD_MAX_CHAR = 2000
 
@@ -62,35 +63,33 @@ class ServerHandler(commands.Cog):
                 self.lastUpdateTimestamp = newTimestamp
 
     # Function to run the shell script
-    def runScript(self, scriptPath):
+    async def runScript(self, scriptPath):
         try:
-            # Run the shell script using the bash shell and capture the output
-            result = subprocess.run(
-                ["bash", scriptPath],
-                check=True,
-                capture_output=True,
-                text=True
+            script_abs_path = os.path.join(self.base_script_dir, scriptPath)
+            process = await asyncio.create_subprocess_shell(
+                f"bash {script_abs_path}",
+                stdout=asyncio.subprocess.PIPE,
+                stderr=asyncio.subprocess.PIPE
             )
+            stdout, stderr = await process.communicate()
+
             # Get the output of stdout and stderr
-            return result.stdout.strip(), result.stderr.strip()
-        except subprocess.CalledProcessError as e:
-            # Handle any errors that might occur
-            # Get the stderr in case of an error
-            return f"Error occurred: {e}", e.stderr.strip()
+            return stdout.decode().strip(), stderr.decode().strip()
         except Exception as e:
             return f"An unexpected error occurred: {e}", ""
 
     @commands.command()
     async def checkserver(self, ctx):
         """Check server mods status, will trigger an update if needed in 60 seconds after execution"""
-        stdout_output, stderr_output = self.runScript(self.scriptPath)
+        stdout_output, stderr_output = await self.runScript("your_script.sh")
 
-        if stdout_output:
-            await ctx.send(stdout_output)
-            self.bot.log.info(f"Script Output: {stdout_output}")
-
+        # Interpret the output of the shell script
+        if stdout_output == 'true':
+            await ctx.send("Updating in progress. Mods will be updated shortly.")
+        elif stdout_output == 'false':
+            await ctx.send("Mods are up to date.")
         else:
-            await ctx.send("The script ran successfully but didn't produce any output.")
+            await ctx.send("An error occurred while checking/modifying the mods.")
 
         if stderr_output:
             await ctx.send(f"Script Error (stderr):\n{stderr_output}")
