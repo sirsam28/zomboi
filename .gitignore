@@ -161,3 +161,6 @@ cython_debug/
 *.log
 .vscode
 map.png
+
+# env
+bot-env
