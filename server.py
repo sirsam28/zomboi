@@ -37,7 +37,7 @@ class ServerHandler(commands.Cog):
         timestamp = datetime.strptime(timestampStr, "%d-%m-%y %H:%M:%S.%f")
         return timestamp, message
 
-    @tasks.loop(seconds=2)
+    @tasks.loop(minutes=30)
     async def update(self):
         """Update the handler
 
