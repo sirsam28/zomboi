@@ -72,7 +72,7 @@ class ServerHandler(commands.Cog):
           return f"An unexpected error occurred: {e}"
     
     @commands.command()
-    async def checkserver(self, ctx, arg: str = None):
+    async def checkserver(self, ctx):
         """Check server mods status, will trigger an update if needed in 60 seconds after execution"""
         output = self.runScript(self.scriptPath)
         self.bot.log.info(f"Script Output: {output}")
