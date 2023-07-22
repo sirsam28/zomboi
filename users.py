@@ -70,7 +70,7 @@ class UserHandler(commands.Cog):
             cur = con.cursor()
             # check the networkPlayers table
             cur.execute(
-                'SELECT name FROM networkPlayers WHERE username = ?', [name])
+                'SELECT name FROM networkPlayers WHERE username = ? COLLATE NOCASE', [name])
             charName = cur.fetchone()
             charName = charName[0] if charName else None
             con.close()
