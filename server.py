@@ -5,9 +5,8 @@ import asyncio
 
 
 class ServerHandler(commands.Cog):
-    def __init__(self, bot, logPath):
+    def __init__(self, bot):
         self.bot = bot
-        self.logPath = logPath
         self.scriptPath = os.getenv("SCRIPT_PATH")
         self.lastUpdateTimestamp = datetime.now()
         if self.scriptPath is None or len(self.scriptPath) == 0:

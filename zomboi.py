@@ -91,7 +91,7 @@ async def on_ready():
         await zomboi.add_cog(AdminLogHandler(zomboi, logPath))
     if os.getenv("SERVER_HANDLER") == "True":
         zomboi.log.info("SERVER_HANDLER feature enabled")
-        await zomboi.add_cog(ServerHandler(zomboi, logPath))
+        await zomboi.add_cog(ServerHandler(zomboi))
 
 # Always finally run the bot
 token = os.getenv("DISCORD_TOKEN")
