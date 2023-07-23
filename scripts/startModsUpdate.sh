@@ -27,7 +27,10 @@ sleep 60
 echo "server is shutting down"
 send_discord_message "$QUIT_MESSAGE" "$QUIT_WEBHOOK"
 screen -S zomboid -X stuff "quit\n"
-sleep 15
+ZPID=$(pidof ProjectZomboid64)
+while [ -e /proc/$ZPID ]; do
+    sleep 1
+done
 
 # Notify users that the server is updating
 echo "server is updating"
