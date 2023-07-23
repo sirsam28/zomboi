@@ -8,8 +8,12 @@ send_discord_message() {
     local payload="{
         \"content\": \"$message\"
     }"
-    curl -H "Content-Type: application/json" -d "$payload" "$webhook_url"
+
+    echo "webhook url: $webhook_url"
+    echo "message: $message"
     echo "sending discord message: $message to webhook"
+
+    curl -H "Content-Type: application/json" -d "$payload" "$webhook_url"
 }
 
 # Notify users that the server will be shutting down in 60 seconds
