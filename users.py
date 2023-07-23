@@ -43,7 +43,8 @@ class UserHandler(commands.Cog):
     def getUser(self, name: str):
         """Get a user from a name, will create if it doesn't exist"""
         if not name in self.users:
-            self.bot.log.info(f"{name} is not in list of users")
+            self.bot.log.info(
+                f"{name} is not in list of users, creating {name}")
             self.users[name] = User(name)
         return self.users[name]
 
@@ -202,12 +203,12 @@ class UserHandler(commands.Cog):
         Provide a username, or leave blank to show the user matching your discord name
         """
         if name is None:
-            name = str(ctx.author.name).lower()
+            name = str(ctx.author.name)
             self.bot.log.info(f"user info by author name: {name}")
         else:
             self.bot.log.info(f"user info by given name: {name}")
 
-        if name in self.users:
+        if name.lower() in (key.lower() for key in self.users):
             await ctx.send(f"Here's the information for user: **{name}**")
             user = self.users[name]
             table = []
