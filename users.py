@@ -44,6 +44,7 @@ class UserHandler(commands.Cog):
         """Get a user from a name, will create if it doesn't exist"""
         name_lower = name.lower()
         if name_lower not in self.users:
+            self.bot.log.info(f"{name_lower} is not in list of users")
             self.users[name_lower] = User(name_lower)
         return self.users[name_lower]
 
