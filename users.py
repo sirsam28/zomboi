@@ -209,8 +209,11 @@ class UserHandler(commands.Cog):
             self.bot.log.info(f"user info by given name: {name}")
 
         if name.lower() in (key.lower() for key in self.users):
-            await ctx.send(f"Here's the information for user: **{name}**")
-            user = self.users[name]
+            # Find the actual key in self.users corresponding to the lowercase_name
+            actual_name = next(
+                key for key in self.users if key.lower() == name.lower())
+            await ctx.send(f"Here's the information for user: **{actual_name}**")
+            user = self.users[actual_name]
             table = []
             table.append(["Name", user.name])
             table.append(
