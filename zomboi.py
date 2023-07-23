@@ -70,7 +70,7 @@ async def on_ready():
         zomboi.log.warning("Unable to get channel, will not be enabled")
     else:
         zomboi.log.info("channel connected")
-        await zomboi.channel.send("Ready to assist, ask for `!help`")
+        await zomboi.channel.send(os.getenv("BOT_READY"))
     if os.getenv("USER_HANDLER") == "True":
         zomboi.log.info("USER_HANDLER feature enabled")
         await zomboi.add_cog(UserHandler(zomboi, logPath))
