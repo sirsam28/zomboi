@@ -42,11 +42,10 @@ class UserHandler(commands.Cog):
 
     def getUser(self, name: str):
         """Get a user from a name, will create if it doesn't exist"""
-        name_lower = name.lower()
-        if name_lower not in self.users:
-            self.bot.log.info(f"{name_lower} is not in list of users")
-            self.users[name_lower] = User(name_lower)
-        return self.users[name_lower]
+        if not name in self.users:
+            self.bot.log.info(f"{name} is not in list of users")
+            self.users[name] = User(name)
+        return self.users[name]
 
     def splitLine(self, line: str):
         """Split a log line into a timestamp and the remaining message"""
@@ -71,7 +70,7 @@ class UserHandler(commands.Cog):
             cur = con.cursor()
             # check the networkPlayers table
             cur.execute(
-                'SELECT name FROM networkPlayers WHERE username = ? COLLATE NOCASE', [name])
+                'SELECT name FROM networkPlayers WHERE username = ?', [name])
             charName = cur.fetchone()
             charName = charName[0] if charName else None
             con.close()
@@ -203,7 +202,7 @@ class UserHandler(commands.Cog):
         Provide a username, or leave blank to show the user matching your discord name
         """
         if name is None:
-            name = ctx.author.name
+            name = str(ctx.author.name).lower()
             self.bot.log.info(f"user info by author name: {name}")
         else:
             self.bot.log.info(f"user info by given name: {name}")
