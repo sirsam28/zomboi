@@ -117,7 +117,7 @@ class PerkHandler(commands.Cog):
             if timestamp > self.lastUpdateTimestamp:
                 self.bot.log.info(f"{user.name} {perk} changed to {level}")
                 if self.notifyPerk:
-                    return os.getenv("NOTIFY_PERK").format(user=user, log_char_string=log_char_string, perk=perk, level=level)
+                    return os.getenv("NOTIFY_PERK").format(user=user, log_char_string=log_char_string, perk=perk.lower(), level=level)
         else:
             # Must be a list of perks following a login/player creation
             for (name, value) in re.findall(r"(\w+)=(\d+)", type):
