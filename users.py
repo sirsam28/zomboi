@@ -134,7 +134,7 @@ class UserHandler(commands.Cog):
             if timestamp > self.lastUpdateTimestamp:
                 self.bot.log.info(f"{user.name} disconnected")
                 if self.notifyDisconnect:
-                    return f":person_running: {user.name} has left"
+                    return os.getenv("NOTIFY_LEAVE").format(user=user)
 
         elif "fully connected" in message:
             matches = re.search(r"\"(.*)\".*\((\d+),(\d+)", message)
