@@ -6,6 +6,13 @@ import os
 import re
 
 
+class FormattedTime:
+    def __init__(self, day, hour, minute):
+        self.day = day
+        self.hour = hour
+        self.minute = minute
+
+
 class PerkHandler(commands.Cog):
     """Class which handles the Perk log files"""
 
@@ -60,6 +67,16 @@ class PerkHandler(commands.Cog):
 
     # Parse a line in the user log file and take appropriate action
 
+    def formatTime(hours):
+        days = hours // 24
+        remaining_hours = hours % 24
+        minutes = remaining_hours * 60
+
+        hours_str = f"{remaining_hours} hour{'s' if remaining_hours != 1 else ''}"
+        minutes_str = f"{minutes} minute{'s' if minutes != 1 else ''}"
+
+        return FormattedTime(day=days, hour=hours_str, minute=minutes_str)
+
     def handleLog(self, timestamp: datetime, message: str, fromUpdate=False):
         # Ignore the id at the start of the message, no idea what it's for
         message = message[message.find("[", 2) + 1:]
@@ -102,7 +119,8 @@ class PerkHandler(commands.Cog):
                 user.online = True
                 self.bot.log.info(f"{user.name} login")
                 if self.notifyJoin:
-                    return os.getenv("NOTIFY_JOIN").format(user=user, log_char_string=log_char_string)
+                    formattedTime = self.formatTime(int(user.recordHoursAlive))
+                    return os.getenv("NOTIFY_JOIN").format(user=user, log_char_string=log_char_string, formattedTime=formattedTime)
         elif "Created Player" in type:
             if timestamp > self.lastUpdateTimestamp:
                 user.online = True
