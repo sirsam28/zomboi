@@ -6,7 +6,7 @@ import os
 import re
 
 
-class FormattedTime:
+class DayHourMinute:
     def __init__(self, day, hour, minute):
         self.day = day
         self.hour = hour
@@ -71,11 +71,7 @@ class PerkHandler(commands.Cog):
         days = hours // 24
         remaining_hours = hours % 24
         minutes = remaining_hours * 60
-
-        hours_str = f"{remaining_hours} hour{'s' if remaining_hours != 1 else ''}"
-        minutes_str = f"{minutes} minute{'s' if minutes != 1 else ''}"
-
-        return FormattedTime(day=days, hour=hours_str, minute=minutes_str)
+        return DayHourMinute(day=days, hour=remaining_hours, minute=minutes)
 
     def handleLog(self, timestamp: datetime, message: str, fromUpdate=False):
         # Ignore the id at the start of the message, no idea what it's for
