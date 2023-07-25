@@ -180,7 +180,7 @@ class UserHandler(commands.Cog):
         if the arg "all" is supplied, show all users
         """
         table = []
-        headers = ["Name", "Online", "Last Seen", "Hours survived"]
+        headers = ["Name", "Online", "Last Seen", "Hours survived", "Deaths"]
         # if the number of users is over 28 (two messages), then only show online users
         num_users = len(self.users.values())
         show_all = True if arg and arg.lower() == 'all' else False
@@ -192,6 +192,7 @@ class UserHandler(commands.Cog):
                         "Yes" if user.online else "No",
                         user.lastSeen.strftime("%d/%m at %H:%M"),
                         user.hoursAlive,
+                        len(user.died),
                     ]
                 )
         await self.check_char_limit(table, ctx, headers=headers)
