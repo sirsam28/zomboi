@@ -67,7 +67,7 @@ class PerkHandler(commands.Cog):
 
     # Parse a line in the user log file and take appropriate action
 
-    def formatTime(hours):
+    def formatTime(self, hours):
         days = hours // 24
         remaining_hours = hours % 24
         minutes = remaining_hours * 60
