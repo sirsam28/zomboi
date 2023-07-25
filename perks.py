@@ -119,7 +119,7 @@ class PerkHandler(commands.Cog):
                 user.online = True
                 self.bot.log.info(f"{user.name} login")
                 if self.notifyJoin:
-                    formattedTime = self.formatTime(int(user.recordHoursAlive))
+                    formattedTime = self.formatTime(user.recordHoursAlive)
                     return os.getenv("NOTIFY_JOIN").format(user=user, log_char_string=log_char_string, formattedTime=formattedTime)
         elif "Created Player" in type:
             if timestamp > self.lastUpdateTimestamp:
