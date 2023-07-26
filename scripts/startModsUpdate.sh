@@ -3,7 +3,7 @@
 # Load environment variables from .env file
 source .env
 
-send_discord_message() {
+sendDiscordMessage() {
     local message="$1"
     local webhook_url="$2"
     local payload="{
@@ -19,13 +19,13 @@ send_discord_message() {
 
 # Notify users that the server will be shutting down in 60 seconds
 echo "server will be shutting down in 60 seconds"
-send_discord_message "$NOTICE_MESSAGE" "$NOTICE_WEBHOOK"
-screen -S zomboid -X stuff "servermsg \"Alert! Spiffo need to do stuffs in 60 seconds\"\n"
+sendDiscordMessage "$NOTICE_MESSAGE" "$NOTICE_WEBHOOK"
+screen -S zomboid -X stuff "servermsg \"$NOTICE_MESSAGE\"\n"
 sleep 60
 
 # Notify users that the server is shutting down
 echo "server is shutting down"
-send_discord_message "$QUIT_MESSAGE" "$QUIT_WEBHOOK"
+sendDiscordMessage "$QUIT_MESSAGE" "$QUIT_WEBHOOK"
 screen -S zomboid -X stuff "quit\n"
 ZPID=$(pidof ProjectZomboid64)
 while [ -e /proc/$ZPID ]; do
@@ -34,15 +34,18 @@ done
 
 # Notify users that the server is updating
 echo "server is updating"
-send_discord_message "$UPDATE_MESSAGE" "$UPDATE_WEBHOOK"
+sendDiscordMessage "$UPDATE_MESSAGE" "$UPDATE_WEBHOOK"
 steamcmd +runscript $HOME/update_zomboid.txt
 
 # Notify users that the server is starting up
 echo "server is starting up"
-send_discord_message "$START_MESSAGE" "$START_WEBHOOK"
+sendDiscordMessage "$START_MESSAGE" "$START_WEBHOOK"
 screen -dmS zomboid /opt/pzserver/start-server.sh
-sleep 15
+GREP_OPTS=(-e "RCON: listening on port 27015.")
+while [ grep -q "${GREP_OPTS[@]}" ~/Zomboid/Logs/*DebugLog-server.txt && echo false || echo true ]; do
+    sleep 1
+done
 
 # Notify users that the server is up and running
 echo "server is up and running"
-send_discord_message "$READY_MESSAGE" "$READY_WEBHOOK"
+sendDiscordMessage "$READY_MESSAGE" "$READY_WEBHOOK"
