@@ -6,11 +6,10 @@ import os
 import re
 
 
-class DayHourMinute:
-    def __init__(self, day, hour, minute):
+class DayHour:
+    def __init__(self, day, hour):
         self.day = day
         self.hour = hour
-        self.minute = minute
 
 
 class PerkHandler(commands.Cog):
@@ -71,8 +70,7 @@ class PerkHandler(commands.Cog):
         hours = int(hours)  # Convert to integer
         days = hours // 24
         remaining_hours = hours % 24
-        minutes = remaining_hours * 60
-        return DayHourMinute(day=days, hour=remaining_hours, minute=minutes)
+        return DayHour(day=days, hour=remaining_hours)
 
     def handleLog(self, timestamp: datetime, message: str, fromUpdate=False):
         # Ignore the id at the start of the message, no idea what it's for
