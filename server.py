@@ -7,15 +7,21 @@ import asyncio
 class ServerHandler(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self.scriptPath = os.getenv("SCRIPT_PATH")
-        if self.scriptPath is None or len(self.scriptPath) == 0:
+        self.checkScriptPath = os.getenv("CHECK_SCRIPT_PATH")
+        if self.checkScriptPath is None or len(self.checkScriptPath) == 0:
             self.bot.log.error(
-                f"script path {self.scriptPath} not found")
+                f"script path {self.checkScriptPath} not found")
         else:
-            self.bot.log.info(f"script path: {self.scriptPath}")
+            self.bot.log.info(f"script path: {self.checkScriptPath}")
+        self.updateScriptPath = os.getenv("UPDATE_SCRIPT_PATH")
+        if self.updateScriptPath is None or len(self.updateScriptPath) == 0:
+            self.bot.log.error(
+                f"script path {self.updateScriptPath} not found")
+        else:
+            self.bot.log.info(f"script path: {self.updateScriptPath}")
         self.webhook = None
 
-    # Function to run the shell script
+    # Function to run shell script
     async def runScript(self, scriptPath):
         try:
             process = await asyncio.create_subprocess_shell(
@@ -34,7 +40,7 @@ class ServerHandler(commands.Cog):
     async def checkserver(self, ctx):
         """Check server mods status, update automatically if needed"""
         self.bot.log.info("!checkserver command called")
-        stdout_output, stderr_output = await self.runScript(self.scriptPath)
+        stdout_output, stderr_output = await self.runScript(self.checkScriptPath)
 
         self.bot.log.error(f"stderr_output: {stderr_output}")
         self.bot.log.info(f"stdout_output: {stdout_output}")
@@ -42,6 +48,7 @@ class ServerHandler(commands.Cog):
         # Interpret the output of the shell script
         if stdout_output == 'true':
             await ctx.send("Updating in progress. Mods will be updated shortly.")
+            await self.runScript(self.updateScriptPath)
         elif stdout_output == 'false':
             await ctx.send("Mods are up to date.")
         else:
