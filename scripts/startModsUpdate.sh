@@ -20,7 +20,7 @@ sendDiscordMessage() {
 # Notify users that the server will be shutting down in 60 seconds
 echo "server will be shutting down in 60 seconds"
 sendDiscordMessage "$NOTICE_MESSAGE" "$NOTICE_WEBHOOK"
-screen -S zomboid -X stuff "servermsg \"$NOTICE_MESSAGE\"\n"
+screen -S zomboid -X stuff "servermsg \"60 Seconds Remaining\"\n"
 sleep 60
 
 # Notify users that the server is shutting down
