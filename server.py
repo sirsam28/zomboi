@@ -33,6 +33,7 @@ class ServerHandler(commands.Cog):
     @commands.command()
     async def checkserver(self, ctx):
         """Check server mods status, update automatically if needed"""
+        self.bot.log.info("!checkserver command called")
         stdout_output, stderr_output = await self.runScript(self.scriptPath)
 
         self.bot.log.error(f"stderr_output: {stderr_output}")

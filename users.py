@@ -179,6 +179,7 @@ class UserHandler(commands.Cog):
         If the user is online -- print all online users
         if the arg "all" is supplied, show all users
         """
+        self.bot.log.info("!users command called")
         table = []
         headers = ["Name", "Online", "Last Seen", "Hours survived", "Deaths"]
         # if the number of users is over 28 (two messages), then only show online users
@@ -203,6 +204,7 @@ class UserHandler(commands.Cog):
 
         Provide a username, or leave blank to show the user matching your discord name
         """
+        self.bot.log.info("!info command called")
         if name is None:
             name = str(ctx.author.name)
             self.bot.log.info(f"user info by author name: {name}")
