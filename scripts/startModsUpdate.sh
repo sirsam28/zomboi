@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Load environment variables from .env file
-source .env
+source ~/zomboi/scripts/.env
 
 send_discord_message() {
     local message="$1"
