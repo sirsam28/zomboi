@@ -41,9 +41,12 @@ steamcmd +runscript $HOME/update_zomboid.txt
 echo "server is starting up"
 send_discord_message "$START_MESSAGE" "$START_WEBHOOK"
 screen -dmS zomboid /opt/pzserver/start-server.sh
-GREP_OPTS=(-e "RCON: listening on port 27015.")
-while [ grep -q "${GREP_OPTS[@]}" ~/Zomboid/Logs/*DebugLog-server.txt && echo false || echo true ]; do
+LOGS="RCON: listening on port 27015."
+LOG_TRUE=$(grep "$LOGS" ~/Zomboid/Logs/*DebugLog-server.txt)
+
+while [ -z "$LOG_TRUE" ]; do
     sleep 1
+    LOG_TRUE=$(grep "$LOGS" ~/Zomboid/Logs/*DebugLog-server.txt)
 done
 
 # Notify users that the server is up and running
