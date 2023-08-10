@@ -1,8 +1,12 @@
 #!/bin/bash
 screen -S zomboid -X stuff "checkModsNeedUpdate\n"
-sleep 2
-if tail ~/Zomboid/Logs/*DebugLog-server.txt -n 1 | grep -q updated; then
-  echo 'false' # Mods are up to date
-else
-  echo 'true'
-fi
+
+tail -f ~/Zomboid/Logs/*DebugLog-server.txt -n 0 | while read line; do
+  if echo $line | grep -q "Mods updated"; then
+    echo "false" && break
+  fi
+
+  if echo $line | grep -q "Mods need update"; then
+    echo "true" && break
+  fi
+done
