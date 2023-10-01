@@ -137,7 +137,7 @@ class UserHandler(commands.Cog):
                 if self.notifyDisconnect:
                     return os.getenv("NOTIFY_LEAVE").format(user=user)
 
-        elif "fully connected" in message:
+        elif "fully-connected" in message:
             matches = re.search(r"\"(.*)\".*\((\d+),(\d+)", message)
             name = matches.group(1)
             user = self.getUser(name)
